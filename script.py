@@ -192,7 +192,7 @@ except:
     print('profile button not found')
 
 following_count = int(str(following.text).replace('following', '').replace(',','').strip())
-print(following_count)
+print(following.text)
 
 print('Following dialog ✅')
 
@@ -204,13 +204,13 @@ time.sleep(2)
 last_item = False
 while last_item != True:
     # Method 1: Scroll using JavaScript 
-    for i in range(100): # scroll multiple times 
+    for i in range(following_count): # scroll multiple times 
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
-        time.sleep(2)
+        time.sleep(1)
 
     items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div a")
     print(len(items))
-    if following_count == len(items):
+    if len(items) >= following_count:
         print(len(items))
         last_item = True
 
