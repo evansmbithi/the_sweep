@@ -206,9 +206,11 @@ while last_item != True:
     # Method 1: Scroll using JavaScript 
     for i in range(following_count): # scroll multiple times 
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
-        time.sleep(1)
+        # time.sleep(1)
+        print(i)
 
-    items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
+    # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
+    items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a") ) )
     print(len(items))
     if len(items) >= following_count:
         print(len(items))
