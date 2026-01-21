@@ -208,7 +208,7 @@ while last_item != True:
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
         time.sleep(1)
 
-    items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div a")
+    items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
     print(len(items))
     if len(items) >= following_count:
         print(len(items))
