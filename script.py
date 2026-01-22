@@ -14,6 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
 
 # create a .env file with USERID, PASSWORD and COUNTRY variables
@@ -182,6 +183,46 @@ def login():
     time.sleep(3)
 
 
+def f4f():
+    login()
+    try:
+        followers = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/followers/?next=%2F"]')))
+        followers.click()
+    except:
+        print('followers button not found')
+
+    time.sleep(5)
+    dialog = wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='x6nl9eh x1a5l9x9 x7vuprf x1mg3h75 x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")))
+    time.sleep(2)
+
+    last_item = False
+    while last_item != True:
+        # Method 1: Scroll using JavaScript 
+        for i in range(500): # scroll multiple times 
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
+            # time.sleep(1)
+            # print(i)
+
+        # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
+        items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) button") ) )
+        print(len(items))
+
+        if len(items) >= 200:
+            print(len(items))
+            last_item = True
+        
+    print('Scrolling through ✅')
+
+
+    for item in items: 
+        ActionChains(driver).move_to_element(item).perform() 
+        time.sleep(1)
+        item.click()
+
+        # confirm_unfollow = WebDriverWait(item, 10).until( EC.element_to_be_clickable( (By.XPATH, "//button[@CLASS='_a9-- _ap36 _a9-_']") ) )
+        # confirm_unfollow.click()
+        # time.sleep(2)
+
 def unfollow_all():
     login()
     try:
@@ -228,14 +269,19 @@ def unfollow_all():
         confirm_unfollow.click()
         time.sleep(2)
 
-
-def f4f():
+def balance():
     login()
     try:
-        followers = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/followers/?next=%2F"]')))
-        followers.click()
+        following = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/following/?next=%2F"]')))
+        following.click()
     except:
-        print('followers button not found')
+        print('following button not found')
+
+    following_count = int(str(following.text).replace('following', '').replace(',','').strip())
+    print(following.text)
+
+    print('Following dialog ✅')
+
 
     time.sleep(5)
     dialog = wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='x6nl9eh x1a5l9x9 x7vuprf x1mg3h75 x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")))
@@ -244,18 +290,20 @@ def f4f():
     last_item = False
     while last_item != True:
         # Method 1: Scroll using JavaScript 
-        for i in range(500): # scroll multiple times 
+        for i in range(5): # scroll multiple times 
             driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
             # time.sleep(1)
             # print(i)
 
         # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
-        items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) button") ) )
+        # items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(3) button") ) )
+        
+        items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a") ) )
         print(len(items))
 
-        if len(items) >= 200:
-            print(len(items))
-            last_item = True
+        # if len(items) >= 1000:
+        #     print(len(items))
+        last_item = True
         
     print('Scrolling through ✅')
 
@@ -263,16 +311,68 @@ def f4f():
     for item in items: 
         ActionChains(driver).move_to_element(item).perform() 
         time.sleep(1)
-        item.click()
+        # item.click()
+
+        # Grab the href so we can revisit it later 
+        clicked_url = item.get_attribute("href") 
+        # Step 3: Open the link in a new tab using CONTROL + click (COMMAND on Mac) 
+        ActionChains(driver).key_down(Keys.CONTROL).click(item).key_up(Keys.CONTROL).perform() 
+        time.sleep(2) # wait for the new tab to open
+
+        # Step 3: Switch to the new window/tab 
+        original_window = driver.current_window_handle 
+        all_windows = driver.window_handles 
+        for window in all_windows: 
+            if window != original_window: 
+                driver.switch_to.window(window) 
+                break 
+        # Step 4: Do something in the new tab (optional) 
+        try:
+            check_follows = wait.until(EC.element_to_be_clickable((By.XPATH, f"//a[@href='{clicked_url}']")))
+            check_follows.click()
+        except:
+            print('following button not found')
+        # check_follows = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='mount_0_0_Pg']/div/div/div[2]/div/div/div[1]/div[2]/div[2]/section/main/div/div/header/div/section[2]/div/div[2]/div[3]/a")))
+        check_follows.click()
+        time.sleep(3)
+        is_evnz = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[4]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div/div[1]/div/div/div/div[2]/div/div/div/div/span/div/a/div/div/span")))
+
+        if '_.evnz_' not in is_evnz.text:
+            close_dialog = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[4]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/button")))
+            close_dialog.click()
+
+            unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='mount_0_0_JK']/div/div/div[2]/div/div/div[1]/div[2]/div[2]/section/main/div/div/header/section[2]/div/div/div/div/div[1]/button")))
+            unfollow_dropdown.click()
+
+            unfollow_button = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[4]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div/div[8]")))
+            unfollow_button.click()
+
+
+            print("Unfollowed:", driver.title) 
+            time.sleep(5)
+        
+        # Step 5: Close the new tab 
+        driver.close() 
+        # Step 6: Switch back to the original window 
+        driver.switch_to.window(original_window) 
+        # # Step 7: Navigate back to the clicked URL (the link’s href) 
+        # clicked_url = link.get_attribute("href") 
+        # driver.get(clicked_url) 
+        # # Keep browser open for a while to observe 
+        # time.sleep(5)
 
         # confirm_unfollow = WebDriverWait(item, 10).until( EC.element_to_be_clickable( (By.XPATH, "//button[@CLASS='_a9-- _ap36 _a9-_']") ) )
         # confirm_unfollow.click()
-        # time.sleep(2)
+        # time.sleep(2)  
+
+ 
 
 if cmdline.lower() in 'unfollow_all':
     unfollow_all()
 elif cmdline.lower() in '4llo f4f':
     f4f()
+elif cmdline.lower() in 'balance':
+    balance()
 
 
 
@@ -282,15 +382,6 @@ elif cmdline.lower() in '4llo f4f':
 
 
 
-# check_follows = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='mount_0_0_Pg']/div/div/div[2]/div/div/div[1]/div[2]/div[2]/section/main/div/div/header/div/section[2]/div/div[2]/div[3]/a")))
-# check_follows.click()
-# time.sleep(3)
-# is_evnz = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div/div[1]/div/div/div/div[2]/div/div/div/div/span/div/a/div/div/span")))
-
-# if '_.evnz_' not in is_evnz.text:
-#     close_dialog = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/button")))
-#     close_dialog.click()
-#     unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/button")))
 
 # break
 
