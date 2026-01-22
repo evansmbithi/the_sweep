@@ -40,15 +40,16 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 # countries = ['rwanda rw','kenya ke','malawi mw','botswana bw','zambia zm']
 
-# try:
-#     cmdline=sys.argv[1]
-#     cmdline2=sys.argv[2]    
-# except:
-#     err_msg = """Please specify country & environment as a commandline argument e.g
-#                 'python index_crn.py RW UAT'
-#                 'python index_crn.py Rwanda PROD'"""
-#     print(err_msg)
-#     exit()
+try:
+    cmdline=sys.argv[1]
+    # cmdline2=sys.argv[2]    
+except:
+    err_msg = """Please specify mode as a commandline argument e.g
+                'python script.py unfollow'
+                'python script.py f4f'
+                'python script.py 4llo'"""
+    print(err_msg)
+    exit()
 
 # if cmdline.lower() in 'botswana bw' and cmdline2.lower() in 'production':
 #     hostname = config['BW_PROD']
@@ -163,7 +164,7 @@ def login():
     lgn_suc = False
     while lgn_suc != True:
         try:
-            wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/_.evnz_/?next=%2F']")))
+            profile = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/_.evnz_/?next=%2F']")))
             lgn_suc = True
         except:
             try:
@@ -172,63 +173,127 @@ def login():
             except:
                 print('sth went wrong')
                 exit()
-
-login()
-
-# time.sleep(10)
-try:
-    profile = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/_.evnz_/?next=%2F']")))
-    profile.click()
-except:
-    print('profile button not found')
-
-print('Profile page ✅')
-time.sleep(3)
-
-try:
-    following = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/following/?next=%2F"]')))
-    following.click()
-except:
-    print('profile button not found')
-
-following_count = int(str(following.text).replace('following', '').replace(',','').strip())
-print(following.text)
-
-print('Following dialog ✅')
+    try:
+        profile.click()
+    except:
+        print('profile button not found')
+    
+    print('Profile page ✅')
+    time.sleep(3)
 
 
-time.sleep(5)
-dialog = wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='x6nl9eh x1a5l9x9 x7vuprf x1mg3h75 x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")))
-time.sleep(2)
+def unfollow_all():
+    login()
+    try:
+        following = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/following/?next=%2F"]')))
+        following.click()
+    except:
+        print('following button not found')
 
-last_item = False
-while last_item != True:
-    # Method 1: Scroll using JavaScript 
-    for i in range(following_count): # scroll multiple times 
-        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
-        # time.sleep(1)
-        print(i)
+    following_count = int(str(following.text).replace('following', '').replace(',','').strip())
+    print(following.text)
 
-    # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
-    items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a") ) )
-    print(len(items))
-    if len(items) >= following_count:
+    print('Following dialog ✅')
+
+
+    time.sleep(5)
+    dialog = wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='x6nl9eh x1a5l9x9 x7vuprf x1mg3h75 x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")))
+    time.sleep(2)
+
+    last_item = False
+    while last_item != True:
+        # Method 1: Scroll using JavaScript 
+        for i in range(following_count): # scroll multiple times 
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
+            # time.sleep(1)
+            # print(i)
+
+        # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
+        items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(3) button") ) )
         print(len(items))
-        last_item = True
 
-print('Scrolling through ✅')
-
-for item in items: 
-    ActionChains(driver).move_to_element(item).click() 
-    time.sleep(0.5)
-    break
+        if len(items) >= 1000:
+            print(len(items))
+            last_item = True
+        
+    print('Scrolling through ✅')
 
 
-# # Method 2: Scroll to each item (optional) 
-# items = dialog.find_elements(By.CSS_SELECTOR, ".item-class") # adjust selector 
-# for item in items: 
-#     ActionChains(driver).move_to_element(item).perform() 
-#     time.sleep(0.5)
+    for item in items: 
+        ActionChains(driver).move_to_element(item).perform() 
+        time.sleep(1)
+        item.click()
+
+        confirm_unfollow = WebDriverWait(item, 10).until( EC.element_to_be_clickable( (By.XPATH, "//button[@CLASS='_a9-- _ap36 _a9-_']") ) )
+        confirm_unfollow.click()
+        time.sleep(2)
+
+
+def f4f():
+    login()
+    try:
+        followers = wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@href="/_.evnz_/followers/?next=%2F"]')))
+        followers.click()
+    except:
+        print('followers button not found')
+
+    time.sleep(5)
+    dialog = wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@class='x6nl9eh x1a5l9x9 x7vuprf x1mg3h75 x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6']")))
+    time.sleep(2)
+
+    last_item = False
+    while last_item != True:
+        # Method 1: Scroll using JavaScript 
+        for i in range(500): # scroll multiple times 
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
+            # time.sleep(1)
+            # print(i)
+
+        # items = dialog.find_elements(By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a")
+        items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) button") ) )
+        print(len(items))
+
+        if len(items) >= 200:
+            print(len(items))
+            last_item = True
+        
+    print('Scrolling through ✅')
+
+
+    for item in items: 
+        ActionChains(driver).move_to_element(item).perform() 
+        time.sleep(1)
+        item.click()
+
+        # confirm_unfollow = WebDriverWait(item, 10).until( EC.element_to_be_clickable( (By.XPATH, "//button[@CLASS='_a9-- _ap36 _a9-_']") ) )
+        # confirm_unfollow.click()
+        # time.sleep(2)
+
+if cmdline.lower() in 'unfollow_all':
+    unfollow_all()
+elif cmdline.lower() in '4llo f4f':
+    f4f()
+
+
+
+
+
+
+
+
+
+# check_follows = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='mount_0_0_Pg']/div/div/div[2]/div/div/div[1]/div[2]/div[2]/section/main/div/div/header/div/section[2]/div/div[2]/div[3]/a")))
+# check_follows.click()
+# time.sleep(3)
+# is_evnz = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div/div[1]/div/div/div/div[2]/div/div/div/div/span/div/a/div/div/span")))
+
+# if '_.evnz_' not in is_evnz.text:
+#     close_dialog = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/button")))
+#     close_dialog.click()
+#     unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/button")))
+
+# break
+
 
 
 # user_list = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div'))) 
