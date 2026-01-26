@@ -357,7 +357,7 @@ def balance():
         items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a") ) )
         print(len(items))
 
-        if int(len(items)) >= 700:
+        if int(len(items)) >= int(following_count)-5:
             print(len(items))
             last_item = True
         
