@@ -586,4 +586,3 @@ elif cmdline.lower() in 'balance':
 
 
 print('DONEEEE🤣')
-time.sleep(3600)
