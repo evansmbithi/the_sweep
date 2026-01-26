@@ -363,8 +363,10 @@ def balance():
         
     print('Scrolling through ✅')
 
+    # Reverse the list 
+    # bottom_up = list(reversed(items))
 
-    for item in items:   
+    for item in reversed(items):   
         print('follows loop ✅')
         # Grab the href so we can revisit it later 
         clicked_url = str(item.get_attribute("href")) 
