@@ -375,17 +375,14 @@ def balance():
         # ActionChains(driver).move_to_element(item).perform() 
         # time.sleep(0.5)
         # item.click()
-        # ig_user=item.text
-        # if ig_user == '':
-        #     continue
+        ig_user=item.text
+        if ig_user == '':
+            continue
         # print(ig_user)
 
         # Step 3: Open the link in a new tab using CONTROL + click (COMMAND on Mac) 
         ActionChains(driver).move_to_element(item).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform() 
         time.sleep(0.5) # wait for the new tab to open
-        ig_user=item.text
-        if ig_user == '':
-            continue
         
         # Step 3: Switch to the new window/tab 
         original_window = driver.current_window_handle 
