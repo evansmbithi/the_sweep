@@ -416,7 +416,41 @@ def balance():
         path_with_query = modified_url.split("instagram.com")[-1]
         # print(path_with_query)
         time.sleep(2)
-        
+        try:
+            zero_following = WebDriverWait(driver, 50).until(EC.presence_of_all_elements_located((By.XPATH, f"//a[@href='#']")))[6]
+            if zero_following is True:
+                driver.refresh()
+                time.sleep(1)
+                unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "//section[@class='x14vqqas x172qv1o']/div/div/div/div/div/button")))
+                unfollow_dropdown.click()
+                
+                time.sleep(1)
+                unfollow_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='x1ja2u2z x1afcbsf x1a2a7pz x6ikm8r x10wlt62 x71s49j x6s0dn4 x78zum5 xdt5ytf xl56j7k x1n2onr6']/div/div/div/div/div/div[8]")))
+                unfollow_button.click()
+                print(f"Unfollowed:'{ig_user}'") 
+                time.sleep(2)
+                try:
+                    driver.close()
+                except:
+                    x=False
+                    while x!=True:
+                        for window in all_windows: 
+                            try:
+                                if window != original_window:                     
+                                    driver.close() 
+                                    continue
+                                else: 
+                                    x=True
+                            except:
+                                x=False
+                time.sleep(1)
+
+                # Step 6: Switch back to the original window 
+                driver.switch_to.window(original_window) 
+                time.sleep(2)
+                continue
+        except:
+            print('zero following not found')
 
         try:
             check_follows = WebDriverWait(driver, 50).until(EC.visibility_of_element_located((By.XPATH, f"//a[@href='{path_with_query}']")))
