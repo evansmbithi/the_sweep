@@ -381,8 +381,8 @@ def balance():
         # print(ig_user)
 
         # Step 3: Open the link in a new tab using CONTROL + click (COMMAND on Mac) 
-        ActionChains(driver).move_to_element(item).key_down(Keys.CONTROL).click(item).key_up(Keys.CONTROL).perform() 
-        time.sleep(1) # wait for the new tab to open
+        ActionChains(driver).move_to_element(item).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform() 
+        time.sleep(0.5) # wait for the new tab to open
         ig_user=item.text
         if ig_user == '':
             continue
@@ -418,7 +418,8 @@ def balance():
         time.sleep(2)
         try:
             zero_following = WebDriverWait(driver, 50).until(EC.presence_of_all_elements_located((By.XPATH, f"//a[@href='#']")))[6]
-            if zero_following is True:
+            print(zero_following.text)
+            if 'following' in zero_following.text:
                 driver.refresh()
                 time.sleep(1)
                 unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "//section[@class='x14vqqas x172qv1o']/div/div/div/div/div/button")))
@@ -432,17 +433,21 @@ def balance():
                 try:
                     driver.close()
                 except:
-                    x=False
-                    while x!=True:
-                        for window in all_windows: 
-                            try:
-                                if window != original_window:                     
-                                    driver.close() 
-                                    continue
-                                else: 
-                                    x=True
-                            except:
-                                x=False
+                    # x=False
+                    # while x!=True:
+                    for window in all_windows: 
+                        try:
+                            if window != original_window:                     
+                                driver.close() 
+                                # continue
+                            # else: 
+                            #     x=True
+                        except:
+                            print('tab closed')
+                            # else: 
+                            #     x=True
+                        # except:
+                        #     x=False
                 time.sleep(1)
 
                 # Step 6: Switch back to the original window 
@@ -473,17 +478,18 @@ def balance():
         except:
             print('following button not found')
             time.sleep(2)
-            x=False
-            while x!=True:
-                for window in all_windows: 
-                    try:
-                        if window != original_window:                     
-                            driver.close() 
-                            continue
-                        else: 
-                            x=True
-                    except:
-                        x=False 
+            # x=False
+            # while x!=True:
+            for window in all_windows: 
+                try:
+                    if window != original_window:                     
+                        driver.close() 
+                        # continue
+                    # else: 
+                    #     x=True
+                except:
+                    print('tab closed')
+                #     x=False 
             time.sleep(1)
 
             # Step 6: Switch back to the original window 
@@ -504,17 +510,18 @@ def balance():
         except:
             print('Unknown error')
             time.sleep(2)
-            x=False
-            while x!=True:
-                for window in all_windows: 
-                    try:
-                        if window != original_window:                     
-                            driver.close() 
-                            continue
-                        else: 
-                            x=True
-                    except:
-                        x=False 
+            # x=False
+            # while x!=True:
+            for window in all_windows: 
+                try:
+                    if window != original_window:                     
+                        driver.close() 
+                        # continue
+                    # else: 
+                    #     x=True
+                except:
+                    print('tab closed')
+                #     x=False 
             time.sleep(1)
 
             # Step 6: Switch back to the original window 
@@ -550,17 +557,18 @@ def balance():
             print(f"Unfollowed:'{ig_user}'") 
             time.sleep(2)
             
-            x=False
-            while x!=True:
-                for window in all_windows: 
-                    try:
-                        if window != original_window:                     
-                            driver.close() 
-                            continue
-                        else: 
-                            x=True
-                    except:
-                        x=False 
+            # x=False
+            # while x!=True:
+            for window in all_windows: 
+                try:
+                    if window != original_window:                     
+                        driver.close() 
+                        # continue
+                    # else: 
+                    #     x=True
+                except:
+                    print('tab closed')
+                #     x=False 
             time.sleep(1)
 
             # Step 6: Switch back to the original window 
@@ -571,24 +579,25 @@ def balance():
 
         else:
             time.sleep(2)
-            x=False
-            while x!=True:
-                for window in all_windows: 
-                    try:
-                        if window != original_window:                     
-                            driver.close() 
-                            continue
-                        else: 
-                            x=True
-                    except:
-                        x=False  
+            # x=False
+            # while x!=True:
+            for window in all_windows: 
+                try:
+                    if window != original_window:                     
+                        driver.close() 
+                        # continue
+                    # else: 
+                    #     x=True
+                except:
+                    print('tab closed')
+                #     x=False  
             time.sleep(1)
 
             # Step 6: Switch back to the original window 
             driver.switch_to.window(original_window) 
             time.sleep(2)
             continue
-            
+
         # # Step 7: Navigate back to the clicked URL (the link’s href) 
         # clicked_url = link.get_attribute("href") 
         # driver.get(clicked_url) 
