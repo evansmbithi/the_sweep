@@ -68,7 +68,6 @@ except:
 # driver = webdriver.Edge('../msedgedriver', options=options)
 # driver = webdriver.Edge(service=EdgeService(executable_path=r'C:\Users\eikindu\Downloads\automation\msedgedriver.exe',service_args=['--log-level=DEBUG','--disable-build-check'],log_output='logs'),options=options)
 
-
 def check_configs():
     try:
         config['USERID']
@@ -311,7 +310,7 @@ def unfollow_all():
         confirm_unfollow.click()
         time.sleep(2)
 
-def balance():
+def balance(logger):
     login()
     try:
         following = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@href='/_.evnz_/following/?next=%2F']")))
@@ -348,7 +347,10 @@ def balance():
     while last_item != True:
         # Method 1: Scroll using JavaScript 
         for i in range(following_count): # scroll multiple times 
-            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
+            try:
+                driver.execute_script("arguments[0].scrollTop = arguments[0].scrollTop + 300;", dialog) 
+            except:
+                continue
             # time.sleep(1)
             # print(i)
 
@@ -359,7 +361,7 @@ def balance():
         print(len(items))
 
         # if int(len(items)) >= (int(following_count)-1):
-        if int(len(items)) == list_length and int(len(items)) >= (int(following_count)+(int(following_count)//2)):
+        if int(len(items)) == list_length and int(len(items)) >= (int(following_count)+(int(following_count)//4)):
             print(len(items))
             last_item = True
 
@@ -381,9 +383,12 @@ def balance():
         if ig_user == '':
             continue
         # print(ig_user)
-
+        # click_within_dialog = wait.until(EC.presence_of_element_located((By.XPATH,"//div[@role='heading']")))
+        # click_within_dialog = wait.until(EC.presence_of_element_located((By.XPATH,"//div[@class='x1qjc9v5 x78zum5 xdt5ytf']")))
+        
+        # move by offset (e.g., 50px right, 30px down from current position)
         # Step 3: Open the link in a new tab using CONTROL + click (COMMAND on Mac) 
-        ActionChains(driver).move_to_element(item).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform() 
+        ActionChains(driver).move_to_element(item).move_by_offset(50, 30).key_down(Keys.CONTROL).click(item).key_up(Keys.CONTROL).perform() 
         time.sleep(0.5) # wait for the new tab to open
         
         # Step 3: Switch to the new window/tab 
@@ -476,6 +481,7 @@ def balance():
             #         check_follows.click()
         except:
             print('following button not found')
+            logger.write(f'Btn not found: {ig_user}\n')
             time.sleep(2)
             # x=False
             # while x!=True:
@@ -508,6 +514,7 @@ def balance():
             # print(get_user)
         except:
             print('Unknown error')
+            logger.write(f'Unknown error: {ig_user}\n')
             time.sleep(2)
             # x=False
             # while x!=True:
@@ -608,13 +615,13 @@ def balance():
         
 
  
-
-if cmdline.lower() in 'unfollow_all':
-    unfollow_all()
-elif cmdline.lower() in '4llo f4f':
-    f4f()
-elif cmdline.lower() in 'balance':
-    balance()
+with open('logs.txt','w+') as logger:
+    if cmdline.lower() in 'unfollow_all':
+        unfollow_all()
+    elif cmdline.lower() in '4llo f4f':
+        f4f()
+    elif cmdline.lower() in 'balance':
+        balance(logger)
 
 
 
