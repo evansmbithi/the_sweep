@@ -414,7 +414,7 @@ def balance():
         # print(path_with_query)
         time.sleep(2)
         try:
-            zero_following = WebDriverWait(driver, 50).until(EC.presence_of_all_elements_located((By.XPATH, f"//a[@href='#']")))[6]
+            zero_following = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, f"//a[@href='#']")))[6]
             print(zero_following.text)
             if 'following' in zero_following.text:
                 driver.refresh()
@@ -455,7 +455,7 @@ def balance():
             print('zero following not found')
 
         try:
-            check_follows = WebDriverWait(driver, 50).until(EC.visibility_of_element_located((By.XPATH, f"//a[@href='{path_with_query}']")))
+            check_follows = WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, f"//a[@href='{path_with_query}']")))
             check_follows.click()
         # except:
         #     try:
@@ -470,7 +470,7 @@ def balance():
             #         print('Disclaimer not found')
             #         driver.refresh()
             #         time.sleep(3)
-            #         check_follows = WebDriverWait(driver, 50).until(EC.visibility_of_element_located((By.XPATH, f"//a[@href='{path_with_query}']")))
+            #         check_follows = WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, f"//a[@href='{path_with_query}']")))
             #         check_follows.click()
         except:
             print('following button not found')
