@@ -534,15 +534,15 @@ def balance():
                 close_dialog = wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='html-div xdj266r x14z9mp xat24cr x1lziwak xexx8yu x18d9i69 x9f619 xjbqb8w x78zum5 x15mokao x1ga7v0g x16uus16 xbiv7yw xf159sx xmzvs34 x1n2onr6 x1plvlek xryxfnj x1c4vz4f x2lah0s xdt5ytf xqjyukv x1qjc9v5 x1oa3qoh x1nhvcw1']/button")))
                 close_dialog.click()
             except:
-                try:
-                    # time.sleep(3)
-                    disclaimer = WebDriverWait(driver, 2).until(EC.visibility_of_element_located((By.LINK_TEXT, "Report a problem")))
-                    ignore_disclaimer = WebDriverWait(disclaimer, 2).until( EC.visibility_of_element_located( (By.XPATH, "following-sibling::button") ) )
-                    ignore_disclaimer.click()
-                    print('Disclaimer ✅')
-                except:
-                    print('Disclaimer not found')
-                    driver.refresh()
+                # try:
+                #     # time.sleep(3)
+                #     disclaimer = WebDriverWait(driver, 2).until(EC.visibility_of_element_located((By.LINK_TEXT, "Report a problem")))
+                #     ignore_disclaimer = WebDriverWait(disclaimer, 2).until( EC.visibility_of_element_located( (By.XPATH, "following-sibling::button") ) )
+                #     ignore_disclaimer.click()
+                #     print('Disclaimer ✅')
+                # except:
+                #     print('Disclaimer not found')
+                driver.refresh()
 
             time.sleep(1)
             unfollow_dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, "//section[@class='x14vqqas x172qv1o']/div/div/div/div/div/button")))
