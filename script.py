@@ -344,6 +344,7 @@ def balance():
     time.sleep(2)
 
     last_item = False
+    list_length = 0
     while last_item != True:
         # Method 1: Scroll using JavaScript 
         for i in range(following_count): # scroll multiple times 
@@ -357,15 +358,16 @@ def balance():
         items = WebDriverWait(dialog, 10).until( EC.presence_of_all_elements_located( (By.CSS_SELECTOR, "div > div > div > div > div > div > div:nth-child(2) a") ) )
         print(len(items))
 
-        if int(len(items)) >= int(following_count)-5:
+        # if int(len(items)) >= (int(following_count)-1):
+        if int(len(items)) == list_length and int(len(items)) >= (int(following_count)+(int(following_count)//2)):
             print(len(items))
             last_item = True
+
+        list_length = int(len(items))
         
     print('Scrolling through ✅')
 
-    # Reverse the list 
-    # bottom_up = list(reversed(items))
-
+    # bottom-up
     for item in reversed(items):   
         print('follows loop ✅')
         # Grab the href so we can revisit it later 
