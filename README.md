@@ -1,9 +1,12 @@
+### Setup
 python -m venv venv
 
 For Windows: 
 .\venv\Scripts\activate
 
 pip install -r requirements.txt
+
+### Execution
 
 1. Unfollow All
 
