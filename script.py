@@ -613,7 +613,6 @@ def balance(logger):
         # confirm_unfollow = WebDriverWait(item, 10).until( EC.element_to_be_clickable( (By.XPATH, "//button[@CLASS='_a9-- _ap36 _a9-_']") ) )
         # confirm_unfollow.click()
         
-
  
 with open('logs.txt','w+') as logger:
     if cmdline.lower() in 'unfollow_all':
