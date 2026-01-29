@@ -2,6 +2,5 @@
 venv/
 *.exe
 text
-*.txt
-logs
+logs.txt
 log
