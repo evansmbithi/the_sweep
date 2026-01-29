@@ -17,7 +17,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 
-# create a .env file with USERID, PASSWORD and COUNTRY variables
+# create a .env file with USERID, PASSWORD
 config = dotenv_values(".env")
 
 # options = webdriver.ChromeOptions()
@@ -37,9 +37,6 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 # except:
 #     options.add_argument("--headless=new")
 #     print('--headless=TRUE')
-    
-
-# countries = ['rwanda rw','kenya ke','malawi mw','botswana bw','zambia zm']
 
 try:
     cmdline=sys.argv[1]
@@ -51,22 +48,6 @@ except:
                 'python script.py 4llo'"""
     print(err_msg)
     exit()
-
-# if cmdline.lower() in 'botswana bw' and cmdline2.lower() in 'production':
-#     hostname = config['BW_PROD']
-# if cmdline.lower() in 'rwanda' and cmdline2.lower() in 'production':
-#     hostname = config['RW_Aos2_PROD']
-# elif cmdline2.lower() in 'production':
-#     hostname = config['PROD']
-# else:
-#     hostname = config['UAT']
-
-# if cmdline not in "".join(countries):
-#     print(f'{cmdline} is not in scope')
-#     exit()
-  
-# driver = webdriver.Edge('../msedgedriver', options=options)
-# driver = webdriver.Edge(service=EdgeService(executable_path=r'C:\Users\eikindu\Downloads\automation\msedgedriver.exe',service_args=['--log-level=DEBUG','--disable-build-check'],log_output='logs'),options=options)
 
 def check_configs():
     try:
