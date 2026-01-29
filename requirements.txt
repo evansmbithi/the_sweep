@@ -1,0 +1,8 @@
+selenium==4.9.0
+webdriver-manager==3.8.6
+python-dotenv==0.21.1
+pandas
+pyttsx3
+Flask==2.2.5
+Pyarrow
+pyodbc
