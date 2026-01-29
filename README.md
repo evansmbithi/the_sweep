@@ -1,10 +1,12 @@
 ### Setup
-python -m venv venv
+Setup python virtual environment
+- python -m venv venv
 
-For Windows: 
-.\venv\Scripts\activate
+Activate virtual environment on Windows: 
+- .\venv\Scripts\activate
 
-pip install -r requirements.txt
+Install dependencies on virtual environment
+- pip install -r requirements.txt
 
 ### Execution
 
@@ -12,10 +14,10 @@ pip install -r requirements.txt
 
         python script.py unfollow_all 
 
-2. Follow4Follow
+2. Follow for Follow
 
         python script.py f4f
 
-3. Unfollow4Unfollow
+3. Unfollow for Unfollow
 
         python script.py balance
